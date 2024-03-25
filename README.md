@@ -5,7 +5,32 @@
 #### Получение курса валюты за определенную дату
 
 <details>
- <summary><code>GET</code> <code><b>/</b></code> <code>info</code></summary>
+ <summary><code>GET</code> <code><b>/</b></code> <code>info</code> <code><b>/</b></code> <code>currency</code></summary>
+
+##### Parameters
+
+> | name     | type     | data type | example    | description                 |
+> |----------|----------|-----------|------------|-----------------------------|
+> | currency | required | string    | USD        | Валюта в стандарте ISO 4217 |
+> | date     | optional | string    | 2016-01-06 | Дата в формате YYYY-MM-DD   |
+
+##### Example output
+
+```json 
+{
+    "data": {
+      "USD": "33,4013"
+    },
+    "service": "currency"
+}
+```
+
+</details>
+
+#### Получение информации о погоде в определенном городе
+
+<details>
+ <summary><code>GET</code> <code><b>/</b></code> <code>info</code> <code><b>/</b></code> <code>weather</code></summary>
 
 ##### Parameters
 
