@@ -8,17 +8,17 @@ import (
 	"time"
 )
 
-type InfoUseCase struct {
-	cbrf InfoReq
+type CurrencyUseCase struct {
+	cbrf CurrencyReq
 }
 
-var _ InfoContract = (*InfoUseCase)(nil)
+var _ CurrencyContract = (*CurrencyUseCase)(nil)
 
-func NewInfoUseCase(cbrf InfoReq) *InfoUseCase {
-	return &InfoUseCase{cbrf: cbrf}
+func NewCurrencyUseCase(cbrf CurrencyReq) *CurrencyUseCase {
+	return &CurrencyUseCase{cbrf: cbrf}
 }
 
-func (i InfoUseCase) GetCurrencyRate(currency string, date string) (string, error) {
+func (i CurrencyUseCase) GetCurrencyRate(currency string, date string) (string, error) {
 	currency = strings.ToUpper(currency)
 
 	correct := checkCurrencyCorrect(currency)

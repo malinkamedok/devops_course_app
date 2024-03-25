@@ -10,13 +10,15 @@ import (
 )
 
 type infoRoutes struct {
-	i usecase.InfoContract
+	c usecase.CurrencyContract
+	w usecase.WeatherContract
 }
 
-func NewInfoRoutes(routes chi.Router, i usecase.InfoContract) {
-	ir := &infoRoutes{i: i}
+func NewInfoRoutes(routes chi.Router, c usecase.CurrencyContract, w usecase.WeatherContract) {
+	ir := &infoRoutes{c: c, w: w}
 
-	routes.Get("/", ir.getCurrencyRate)
+	routes.Get("/currency", ir.getCurrencyRate)
+	routes.Get("/weather", ir.getWeather)
 }
 
 type resp struct {
@@ -28,7 +30,7 @@ func (i *infoRoutes) getCurrencyRate(w http.ResponseWriter, r *http.Request) {
 	currency := r.URL.Query().Get("currency")
 	date := r.URL.Query().Get("date")
 
-	response, err := i.i.GetCurrencyRate(currency, date)
+	response, err := i.c.GetCurrencyRate(currency, date)
 	if err != nil {
 		err := render.Render(w, r, web.ErrRender(err))
 		if err != nil {
@@ -38,5 +40,21 @@ func (i *infoRoutes) getCurrencyRate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	responseJSON := resp{Data: map[string]string{currency: response}, Service: "currency"}
+	render.JSON(w, r, responseJSON)
+}
+
+func (i *infoRoutes) getWeather(w http.ResponseWriter, r *http.Request) {
+	city := r.URL.Query().Get("city")
+
+	response, err := i.w.GetWeatherInfo(city)
+	if err != nil {
+		err := render.Render(w, r, web.ErrRender(err))
+		if err != nil {
+			log.Printf("Rendering error")
+			return
+		}
+		return
+	}
+	responseJSON := resp{Data: map[string]string{city: response}, Service: "weather"}
 	render.JSON(w, r, responseJSON)
 }

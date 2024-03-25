@@ -12,13 +12,13 @@ import (
 	"net/http"
 )
 
-type InfoCBRF struct{}
+type CurrencyCBRF struct{}
 
-func NewInfoReq() *InfoCBRF {
-	return &InfoCBRF{}
+func NewCurrencyReq() *CurrencyCBRF {
+	return &CurrencyCBRF{}
 }
 
-func (i InfoCBRF) InitRequest(dateFormatted string) (*http.Request, error) {
+func (i CurrencyCBRF) InitRequest(dateFormatted string) (*http.Request, error) {
 	url := "https://www.cbr.ru/scripts/XML_daily.asp?date_req=" + dateFormatted
 
 	req, err := http.NewRequest("GET", url, nil)
@@ -33,7 +33,7 @@ func (i InfoCBRF) InitRequest(dateFormatted string) (*http.Request, error) {
 	return req, nil
 }
 
-func (i InfoCBRF) SendRequest(r *http.Request) (*http.Response, error) {
+func (i CurrencyCBRF) SendRequest(r *http.Request) (*http.Response, error) {
 	c := http.Client{}
 
 	resp, err := c.Do(r)
@@ -45,7 +45,7 @@ func (i InfoCBRF) SendRequest(r *http.Request) (*http.Response, error) {
 	return resp, nil
 }
 
-func (i InfoCBRF) DecodeResponse(response *http.Response) (*entity.ValCurs, error) {
+func (i CurrencyCBRF) DecodeResponse(response *http.Response) (*entity.ValCurs, error) {
 	responseData, err := io.ReadAll(response.Body)
 	if err != nil {
 		log.Printf("Error in reading response")
@@ -67,7 +67,7 @@ func (i InfoCBRF) DecodeResponse(response *http.Response) (*entity.ValCurs, erro
 	return rates, nil
 }
 
-func (i InfoCBRF) FindCurrencyRate(currency string, currencyRates *entity.ValCurs) (string, error) {
+func (i CurrencyCBRF) FindCurrencyRate(currency string, currencyRates *entity.ValCurs) (string, error) {
 	for _, v := range currencyRates.Valutes {
 		if v.CharCode == currency {
 			return v.Value, nil
@@ -76,4 +76,4 @@ func (i InfoCBRF) FindCurrencyRate(currency string, currencyRates *entity.ValCur
 	return "", fmt.Errorf("Currency or rate not found")
 }
 
-var _ usecase.InfoReq = (*InfoCBRF)(nil)
+var _ usecase.CurrencyReq = (*CurrencyCBRF)(nil)
