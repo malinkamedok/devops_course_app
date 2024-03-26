@@ -18,6 +18,7 @@ var _ WeatherContract = (*WeatherUseCase)(nil)
 
 func (w WeatherUseCase) GetWeatherInfo(dateFrom string, dateTo string, city string) (weather.ResponseData, error) {
 	if city == "" {
+		//city = "SaintPetersburg"
 		return weather.ResponseData{}, fmt.Errorf("location is not specified")
 	}
 
