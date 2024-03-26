@@ -7,26 +7,67 @@ info:
 servers:
   - url: http://localhost:8000
 paths:
-  /info:
+  /info/currency:
     get:
       tags:
         - info
       summary: Функция получения курса валюты за определенную дату
       description: Принимает название валюты в формате ISO 4217 и дату в формате YYYY-MM-DD.
       operationId: getCurrencyRate
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/request'
-        required: true
+      parameters:
+        - in: query
+          name: currency
+          schema:
+            type: string
+          description: 'Название валюты в формате ISO 4217. Пример: USD'
+        - in: query
+          name: date
+          schema:
+            type: string
+          description: Дата в формате YYYY-MM-DD
       responses:
         '200':
           description: Данные получены успешно
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/response'
+                $ref: '#/components/schemas/currencyResponse'
+        '422':
+          description: Некорректные данные
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/incorrectResponse'
+  /info/weather:
+    get:
+      tags:
+        - info
+      summary: Функция получения данных о погоде в определенной локации за указанный период времени
+      description: Принимает локацию и даты от и до в формате YYYY-MM-DD. Стандартное значение даты от - предыдущий день, до - текущий день.
+      operationId: getWeatherInfo
+      parameters:
+        - in: query
+          name: city
+          schema:
+            type: string
+          description: 'Локация. Пример: SaintPetersburg'
+        - in: query
+          name: dateFrom
+          schema:
+            type: string
+          description: Дата начала сбора информации в формате YYYY-MM-DD
+        - in: query
+          name: dateTo
+          schema:
+            type: string
+          description: Дата конца сбора информации в формате YYYY-MM-DD
+      responses:
+        '200':
+          description: Данные получены успешно
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/weatherResponse'
         '422':
           description: Некорректные данные
           content:
@@ -35,18 +76,7 @@ paths:
                 $ref: '#/components/schemas/incorrectResponse'
 components:
     schemas:
-      request:
-        required:
-          - currency
-        type: object
-        properties:
-          currency:
-            type: string
-            example: USD
-          date:
-            type: string
-            example: 2016-01-02
-      response:
+      currencyResponse:
         type: object
         properties:
           data:
@@ -56,6 +86,83 @@ components:
           service:
             type: string
             example: 'currency'
+      weatherResponse:
+        type: object
+        properties:
+          data:
+            type: object
+            properties:
+              city:
+                type: string
+                example: "SaintPetersburg"
+              from:
+                type: string
+                format: date
+                example: "2024-03-25"
+              to:
+                type: string
+                format: date
+                example: "2024-03-26"
+              temperature_c:
+                type: object
+                properties:
+                  average:
+                    type: number
+                    format: float
+                    example: 2.35
+                  median:
+                    type: number
+                    format: float
+                    example: 2.35
+                  min:
+                    type: number
+                    format: float
+                    example: -1
+                  max:
+                    type: number
+                    format: float
+                    example: 8
+              humidity:
+                type: object
+                properties:
+                  average:
+                    type: number
+                    format: float
+                    example: 86.5
+                  median:
+                    type: number
+                    format: float
+                    example: 86.5
+                  min:
+                    type: number
+                    format: float
+                    example: 85.6
+                  max:
+                    type: number
+                    format: float
+                    example: 87.4
+              pressure_mb:
+                type: object
+                properties:
+                  average:
+                    type: number
+                    format: float
+                    example: 1004.8
+                  median:
+                    type: number
+                    format: float
+                    example: 1004.8
+                  min:
+                    type: number
+                    format: float
+                    example: 1000.7
+                  max:
+                    type: number
+                    format: float
+                    example: 1008.9
+          service:
+            type: string
+            example: "weather"
       incorrectResponse:
         type: object
         properties:
@@ -64,4 +171,4 @@ components:
             example: "Error rendering response."
           error:
             type: string
-            example: "incorrect currency code"
+            example: "some error info"
