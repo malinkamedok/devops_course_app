@@ -6,7 +6,8 @@ import (
 )
 
 type Config struct {
-	AppPort string `env:"PORT" envDefault:"8000"`
+	AppPort  string `env:"PORT" envDefault:"8000"`
+	VSApiKey string `env:"VS_API_KEY"`
 }
 
 func NewConfig() (*Config, error) {

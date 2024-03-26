@@ -1,4 +1,4 @@
-package entity
+package currency
 
 type ValCurs struct {
 	Date    string   `xml:"Date,attr"`

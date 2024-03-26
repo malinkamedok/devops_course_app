@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func NewRouter(handler *chi.Mux, i usecase.InfoContract) {
+func NewRouter(handler *chi.Mux, c usecase.CurrencyContract, w usecase.WeatherContract) {
 	handler.Route("/info", func(r chi.Router) {
 		r.Use(cors.Handler(cors.Options{
 			AllowedOrigins:   []string{"https://*", "http://*"},
@@ -17,7 +17,7 @@ func NewRouter(handler *chi.Mux, i usecase.InfoContract) {
 			AllowCredentials: true,
 			MaxAge:           300,
 		}))
-		NewInfoRoutes(r, i)
+		NewInfoRoutes(r, c, w)
 	})
 
 	handler.NotFound(func(w http.ResponseWriter, r *http.Request) {

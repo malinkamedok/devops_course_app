@@ -5,6 +5,7 @@ import (
 	v1 "devops_course_app/internal/controller/http/v1"
 	"devops_course_app/internal/usecase"
 	"devops_course_app/internal/usecase/cbrf"
+	"devops_course_app/internal/usecase/visualcrossing"
 	"devops_course_app/pkg/httpserver"
 	"github.com/go-chi/chi/v5"
 	"log"
@@ -15,15 +16,17 @@ import (
 
 func Run(cfg *config.Config) {
 
-	i := usecase.NewInfoUseCase(cbrf.NewInfoReq())
+	c := usecase.NewCurrencyUseCase(cbrf.NewCurrencyReq())
+	w := usecase.NewWeatherUseCase(visualcrossing.NewVSReq(cfg.VSApiKey))
 
 	handler := chi.NewRouter()
 
-	v1.NewRouter(handler, i)
+	v1.NewRouter(handler, c, w)
 
 	server := httpserver.New(handler, httpserver.Port(cfg.AppPort))
 	interruption := make(chan os.Signal, 1)
 	signal.Notify(interruption, os.Interrupt, syscall.SIGTERM)
+	log.Printf("server started")
 
 	select {
 	case s := <-interruption:
