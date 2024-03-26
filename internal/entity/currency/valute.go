@@ -1,4 +1,4 @@
-package entity
+package currency
 
 type Valute struct {
 	ID       string `xml:"ID,attr"`

@@ -16,12 +16,12 @@ import (
 
 func Run(cfg *config.Config) {
 
-	с := usecase.NewCurrencyUseCase(cbrf.NewCurrencyReq())
-	w := usecase.NewWeatherUseCase(visualcrossing.NewVSReq())
+	c := usecase.NewCurrencyUseCase(cbrf.NewCurrencyReq())
+	w := usecase.NewWeatherUseCase(visualcrossing.NewVSReq(cfg.VSApiKey))
 
 	handler := chi.NewRouter()
 
-	v1.NewRouter(handler, с, w)
+	v1.NewRouter(handler, c, w)
 
 	server := httpserver.New(handler, httpserver.Port(cfg.AppPort))
 	interruption := make(chan os.Signal, 1)

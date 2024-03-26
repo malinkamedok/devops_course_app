@@ -1,7 +1,8 @@
 package usecase
 
 import (
-	"devops_course_app/internal/entity"
+	"devops_course_app/internal/entity/currency"
+	"devops_course_app/internal/entity/weather"
 	"net/http"
 )
 
@@ -9,8 +10,8 @@ type (
 	CurrencyReq interface {
 		InitRequest(dateFormatted string) (*http.Request, error)
 		SendRequest(r *http.Request) (*http.Response, error)
-		DecodeResponse(response *http.Response) (*entity.ValCurs, error)
-		FindCurrencyRate(currency string, currencyRates *entity.ValCurs) (string, error)
+		DecodeResponse(response *http.Response) (*currency.ValCurs, error)
+		FindCurrencyRate(currency string, currencyRates *currency.ValCurs) (string, error)
 	}
 
 	CurrencyContract interface {
@@ -18,9 +19,12 @@ type (
 	}
 
 	WeatherReq interface {
+		InitRequest(dateFrom string, dateTo string, city string) (*http.Request, error)
+		SendRequest(r *http.Request) (*http.Response, error)
+		DecodeResponse(response *http.Response) (*weather.WeatherData, error)
 	}
 
 	WeatherContract interface {
-		GetWeatherInfo(city string) (string, error)
+		GetWeatherInfo(dateFrom string, dateTo string, city string) (weather.ResponseData, error)
 	}
 )

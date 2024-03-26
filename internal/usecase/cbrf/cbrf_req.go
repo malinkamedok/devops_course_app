@@ -2,7 +2,7 @@ package cbrf
 
 import (
 	"bytes"
-	"devops_course_app/internal/entity"
+	"devops_course_app/internal/entity/currency"
 	"devops_course_app/internal/usecase"
 	"encoding/xml"
 	"fmt"
@@ -45,7 +45,9 @@ func (i CurrencyCBRF) SendRequest(r *http.Request) (*http.Response, error) {
 	return resp, nil
 }
 
-func (i CurrencyCBRF) DecodeResponse(response *http.Response) (*entity.ValCurs, error) {
+func (i CurrencyCBRF) DecodeResponse(response *http.Response) (*currency.ValCurs, error) {
+	defer response.Body.Close()
+
 	responseData, err := io.ReadAll(response.Body)
 	if err != nil {
 		log.Printf("Error in reading response")
@@ -56,7 +58,7 @@ func (i CurrencyCBRF) DecodeResponse(response *http.Response) (*entity.ValCurs, 
 	decoder := xml.NewDecoder(reader)
 	decoder.CharsetReader = charset.NewReaderLabel
 
-	rates := new(entity.ValCurs)
+	rates := new(currency.ValCurs)
 
 	err = decoder.Decode(rates)
 	if err != nil {
@@ -67,7 +69,7 @@ func (i CurrencyCBRF) DecodeResponse(response *http.Response) (*entity.ValCurs, 
 	return rates, nil
 }
 
-func (i CurrencyCBRF) FindCurrencyRate(currency string, currencyRates *entity.ValCurs) (string, error) {
+func (i CurrencyCBRF) FindCurrencyRate(currency string, currencyRates *currency.ValCurs) (string, error) {
 	for _, v := range currencyRates.Valutes {
 		if v.CharCode == currency {
 			return v.Value, nil
