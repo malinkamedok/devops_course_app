@@ -4,6 +4,8 @@ import (
 	"devops_course_app/internal/entity/weather"
 	"devops_course_app/internal/usecase"
 	"encoding/json"
+	"errors"
+	"io"
 	"log"
 	"net/http"
 )
@@ -45,11 +47,18 @@ func (w WeatherVS) SendRequest(r *http.Request) (*http.Response, error) {
 func (w WeatherVS) DecodeResponse(response *http.Response) (*weather.WeatherData, error) {
 	defer response.Body.Close()
 
-	var resp weather.WeatherData
-	err := json.NewDecoder(response.Body).Decode(&resp)
+	bodyBytes, err := io.ReadAll(response.Body)
 	if err != nil {
-		log.Printf("Error in decoding response")
+		log.Printf("Error reading response body: %v", err)
 		return nil, err
+	}
+
+	var resp weather.WeatherData
+	err = json.Unmarshal(bodyBytes, &resp)
+	if err != nil {
+		bodyString := string(bodyBytes)
+		log.Printf("Error message from VisualCrossing: %s\n", bodyString)
+		return nil, errors.New(bodyString)
 	}
 
 	return &resp, nil
