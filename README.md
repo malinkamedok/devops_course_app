@@ -106,5 +106,5 @@
 docker-compose up --build
 ```
 
-[Ссылка на документацию](https://malinkamedok.github.io/currency_app/)
+[Ссылка на документацию](https://malinkamedok.github.io/devops_course_app/)
 
