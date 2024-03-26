@@ -2,6 +2,8 @@ package usecase
 
 import (
 	"devops_course_app/internal/entity/weather"
+	"fmt"
+	"time"
 )
 
 type WeatherUseCase struct {
@@ -15,6 +17,18 @@ func NewWeatherUseCase(vs WeatherReq) *WeatherUseCase {
 var _ WeatherContract = (*WeatherUseCase)(nil)
 
 func (w WeatherUseCase) GetWeatherInfo(dateFrom string, dateTo string, city string) (weather.ResponseData, error) {
+	if city == "" {
+		return weather.ResponseData{}, fmt.Errorf("location is not specified")
+	}
+
+	if dateFrom == "" {
+		dateFrom = time.Now().AddDate(0, 0, -1).Format("2006-01-02")
+	}
+
+	if dateTo == "" {
+		dateTo = time.Now().Format("2006-01-02")
+	}
+
 	req, err := w.vs.InitRequest(dateFrom, dateTo, city)
 	if err != nil {
 		return weather.ResponseData{}, err
