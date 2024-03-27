@@ -23,8 +23,8 @@ func NewInfoRoutes(routes chi.Router, c usecase.CurrencyContract, w usecase.Weat
 }
 
 type resp struct {
-	Data    map[string]string `json:"data"`
-	Service string            `json:"service"`
+	Data    map[string]float64 `json:"data"`
+	Service string             `json:"service"`
 }
 
 type respWeather struct {
@@ -45,7 +45,7 @@ func (i *infoRoutes) getCurrencyRate(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
-	responseJSON := resp{Data: map[string]string{currency: response}, Service: "currency"}
+	responseJSON := resp{Data: map[string]float64{currency: response}, Service: "currency"}
 	render.JSON(w, r, responseJSON)
 }
 

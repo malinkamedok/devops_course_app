@@ -10,6 +10,8 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"strconv"
+	"strings"
 )
 
 type CurrencyCBRF struct{}
@@ -69,13 +71,13 @@ func (i CurrencyCBRF) DecodeResponse(response *http.Response) (*currency.ValCurs
 	return rates, nil
 }
 
-func (i CurrencyCBRF) FindCurrencyRate(currency string, currencyRates *currency.ValCurs) (string, error) {
+func (i CurrencyCBRF) FindCurrencyRate(currency string, currencyRates *currency.ValCurs) (float64, error) {
 	for _, v := range currencyRates.Valutes {
 		if v.CharCode == currency {
-			return v.Value, nil
+			return strconv.ParseFloat(strings.Replace(v.Value, ",", ".", 1), 64)
 		}
 	}
-	return "", fmt.Errorf("Currency or rate not found")
+	return 0, fmt.Errorf("Currency or rate not found")
 }
 
 var _ usecase.CurrencyReq = (*CurrencyCBRF)(nil)

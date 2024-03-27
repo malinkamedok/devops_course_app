@@ -19,7 +19,7 @@
 ```json 
 {
     "data": {
-      "USD": "33,4013"
+      "USD": 33.4013
     },
     "service": "currency"
 }
@@ -107,4 +107,6 @@ docker-compose up --build
 ```
 
 [Ссылка на документацию](https://malinkamedok.github.io/devops_course_app/)
+
+
 
