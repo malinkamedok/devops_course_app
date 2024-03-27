@@ -11,15 +11,15 @@
 
 > | name     | type     | data type | example    | description                 |
 > |----------|----------|-----------|------------|-----------------------------|
-> | currency | required | string    | USD        | Валюта в стандарте ISO 4217 |
-> | date     | optional | string    | 2016-01-06 | Дата в формате YYYY-MM-DD   |
+> | currency | required | string    | `USD`        | Валюта в стандарте ISO 4217 |
+> | date     | optional | string    | `2016-01-06` | Дата в формате YYYY-MM-DD   |
 
 ##### Example output
 
 ```json 
 {
     "data": {
-      "USD": "33,4013"
+      "USD": 33.4013
     },
     "service": "currency"
 }
@@ -36,9 +36,9 @@
 
 > | name | type     | data type | example         | description                         |
 > |------|----------|-----------|-----------------|-------------------------------------|
-> | city | required | string    | SaintPetersburg | Страна, город, адрес или координаты |
-> | from | optional | string    | 2024-03-20      | Дата в формате YYYY-MM-DD           |
-> | to   | optional | string    | 2024-03-26      | Дата в формате YYYY-MM-DD           |
+> | city | required | string    | `SaintPetersburg` | Страна, город, адрес или координаты |
+> | from | optional | string    | `2024-03-20`      | Дата в формате YYYY-MM-DD           |
+> | to   | optional | string    | `2024-03-26`      | Дата в формате YYYY-MM-DD           |
 
 ##### Example output
 
@@ -102,9 +102,33 @@
 
 Для запуска выполнить сборку приложения
 
+### docker compose
+
 ```bash
 docker-compose up --build
 ```
+### linux machine
 
-[Ссылка на документацию](https://malinkamedok.github.io/devops_course_app/)
+```bash
+go mod tidy
+go build -o app cmd/main/main.go 
+./app
+```
+
+### Документация
+[OpenApi](https://malinkamedok.github.io/devops_course_app/)
+
+<details>
+ <summary>Переменные окружения</summary>
+
+##### Parameters
+
+> | name    | type     | example                     | description                             |
+> |---------|----------|-----------------------------|-----------------------------------------|
+> | PORT    | optional | `8000`                      | Порт приложения. default = 8000         |
+> | API_KEY | required | `AAAAAAAAAAAAAAA123BBBBBBB` | API ключ для сервиса visualcrossing     |
+
+</details>
+
+
 

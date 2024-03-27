@@ -11,11 +11,11 @@ type (
 		InitRequest(dateFormatted string) (*http.Request, error)
 		SendRequest(r *http.Request) (*http.Response, error)
 		DecodeResponse(response *http.Response) (*currency.ValCurs, error)
-		FindCurrencyRate(currency string, currencyRates *currency.ValCurs) (string, error)
+		FindCurrencyRate(currency string, currencyRates *currency.ValCurs) (float64, error)
 	}
 
 	CurrencyContract interface {
-		GetCurrencyRate(currency string, date string) (string, error)
+		GetCurrencyRate(currency string, date string) (float64, error)
 	}
 
 	WeatherReq interface {
