@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"slices"
+	"strings"
 	"time"
 )
 
@@ -18,6 +19,12 @@ func NewCurrencyUseCase(cbrf CurrencyReq) *CurrencyUseCase {
 }
 
 func (i CurrencyUseCase) GetCurrencyRate(currency string, date string) (float64, error) {
+	currency = strings.ToUpper(currency)
+
+	correct := checkCurrencyCorrect(currency)
+	if !correct {
+		return 0, fmt.Errorf("incorrect currency code")
+	}
 
 	dateFormatted, err := parseAndFormatDate(date)
 	if err != nil {
