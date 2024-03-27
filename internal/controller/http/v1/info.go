@@ -22,7 +22,7 @@ func NewInfoRoutes(routes chi.Router, c usecase.CurrencyContract, w usecase.Weat
 	routes.Get("/weather", ir.getWeather)
 }
 
-type resp struct {
+type respCurrency struct {
 	Data    map[string]float64 `json:"data"`
 	Service string             `json:"service"`
 }
@@ -33,10 +33,10 @@ type respWeather struct {
 }
 
 func (i *infoRoutes) getCurrencyRate(w http.ResponseWriter, r *http.Request) {
-	currency := r.URL.Query().Get("currency")
+	currencyCode := r.URL.Query().Get("currency")
 	date := r.URL.Query().Get("date")
 
-	response, err := i.c.GetCurrencyRate(currency, date)
+	response, err := i.c.GetCurrencyRate(currencyCode, date)
 	if err != nil {
 		err := render.Render(w, r, web.ErrRender(err))
 		if err != nil {
@@ -45,7 +45,8 @@ func (i *infoRoutes) getCurrencyRate(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
-	responseJSON := resp{Data: map[string]float64{currency: response}, Service: "currency"}
+
+	responseJSON := respCurrency{Data: response, Service: "currency"}
 	render.JSON(w, r, responseJSON)
 }
 
