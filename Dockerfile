@@ -19,4 +19,6 @@ EXPOSE 8000
 RUN adduser -D user
 USER user
 COPY --from=builder --chown=user /bin/app /usr/bin/app
+ARG API_KEY
+ENV API_KEY=${API_KEY}
 CMD [ "/usr/bin/app" ]
