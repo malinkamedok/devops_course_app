@@ -4,10 +4,11 @@ import (
 	"devops_course_app/internal/entity/weather"
 	"devops_course_app/internal/usecase"
 	"devops_course_app/pkg/web"
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/render"
 	"log"
 	"net/http"
+
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/render"
 )
 
 type infoRoutes struct {
@@ -51,8 +52,8 @@ func (i *infoRoutes) getCurrencyRate(w http.ResponseWriter, r *http.Request) {
 }
 
 func (i *infoRoutes) getWeather(w http.ResponseWriter, r *http.Request) {
-	dateFrom := r.URL.Query().Get("from")
-	dateTo := r.URL.Query().Get("to")
+	dateFrom := r.URL.Query().Get("date_from")
+	dateTo := r.URL.Query().Get("date_to")
 	city := r.URL.Query().Get("city")
 
 	response, err := i.w.GetWeatherInfo(dateFrom, dateTo, city)
