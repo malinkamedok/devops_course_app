@@ -16,7 +16,7 @@
 
 ##### Example output
 
-```json 
+```json
 {
     "data": {
       "USD": 33.4013
@@ -34,15 +34,15 @@
 
 ##### Parameters
 
-> | name | type     | data type | example         | description                         |
-> |------|----------|-----------|-----------------|-------------------------------------|
-> | city | required | string    | `SaintPetersburg` | Страна, город, адрес или координаты |
-> | from | optional | string    | `2024-03-20`      | Дата в формате YYYY-MM-DD           |
-> | to   | optional | string    | `2024-03-26`      | Дата в формате YYYY-MM-DD           |
+> | name      | type     | data type | example         | description                         |
+> |-----------|----------|-----------|-----------------|-------------------------------------|
+> | city      | required | string    | `SaintPetersburg` | Страна, город, адрес или координаты |
+> | date_from | optional | string    | `2024-03-20`      | Дата в формате YYYY-MM-DD           |
+> | date_to   | optional | string    | `2024-03-26`      | Дата в формате YYYY-MM-DD           |
 
 ##### Example output
 
-```json 
+```json
 {
   "data": {
     "city": "SaintPetersburg",
@@ -78,7 +78,7 @@
 
 ```bash
 .
-├── .github         
+├── .github
 │   └── workflows             # CI
 ├── cmd
 │   └── main                  # Точка входа в приложение
@@ -88,7 +88,7 @@
 │   ├── config                # Парсинг переменных окружения (стандартный порт)
 │   ├── controller
 │   │   └── http
-│   │       └── v1            # Endpoints 
+│   │       └── v1            # Endpoints
 │   ├── entity                # Сущности
 │   └── usecase               # Бизнес-логика приложения
 │       ├── cbrf              # Обработка данных с ЦБ РФ
@@ -111,7 +111,7 @@ docker-compose up --build
 
 ```bash
 go mod tidy
-go build -o app cmd/main/main.go 
+go build -o app cmd/main/main.go
 ./app
 ```
 
@@ -129,6 +129,3 @@ go build -o app cmd/main/main.go
 > | API_KEY | required | `AAAAAAAAAAAAAAA123BBBBBBB` | API ключ для сервиса visualcrossing     |
 
 </details>
-
-
-
