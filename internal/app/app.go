@@ -7,17 +7,18 @@ import (
 	"devops_course_app/internal/usecase/cbrf"
 	"devops_course_app/internal/usecase/visualcrossing"
 	"devops_course_app/pkg/httpserver"
-	"github.com/go-chi/chi/v5"
 	"log"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/go-chi/chi/v5"
 )
 
 func Run(cfg *config.Config) {
 
 	c := usecase.NewCurrencyUseCase(cbrf.NewCurrencyReq())
-	w := usecase.NewWeatherUseCase(visualcrossing.NewVSReq(cfg.VSApiKey))
+	w := usecase.NewWeatherUseCase(visualcrossing.NewVSReq(cfg.ApiKeys))
 
 	handler := chi.NewRouter()
 
