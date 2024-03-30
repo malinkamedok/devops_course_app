@@ -8,20 +8,35 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"strings"
 )
 
 type WeatherVS struct {
-	apiKey string
+	apiKeys       []string
+	currentApiKey string
 }
 
-func NewVSReq(apiKey string) *WeatherVS {
-	return &WeatherVS{apiKey: apiKey}
+func NewVSReq(apiKeys []string) *WeatherVS {
+	return &WeatherVS{apiKeys: apiKeys, currentApiKey: apiKeys[0]}
 }
 
 var _ usecase.WeatherReq = (*WeatherVS)(nil)
 
+func (w *WeatherVS) UpdateApiKey() {
+	for i, key := range w.apiKeys {
+		if key == w.currentApiKey {
+			if i == len(w.apiKeys)-1 {
+				w.currentApiKey = w.apiKeys[0]
+			} else {
+				w.currentApiKey = w.apiKeys[i+1]
+			}
+			break
+		}
+	}
+}
+
 func (w WeatherVS) InitRequest(dateFrom string, dateTo string, city string) (*http.Request, error) {
-	url := "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/" + city + "/" + dateFrom + "/" + dateTo + "?unitGroup=metric&key=" + w.apiKey
+	url := "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/" + city + "/" + dateFrom + "/" + dateTo + "?unitGroup=metric&key=" + w.currentApiKey
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
@@ -44,7 +59,7 @@ func (w WeatherVS) SendRequest(r *http.Request) (*http.Response, error) {
 	return resp, nil
 }
 
-func (w WeatherVS) DecodeResponse(response *http.Response) (*weather.WeatherData, error) {
+func (w *WeatherVS) DecodeResponse(response *http.Response) (*weather.WeatherData, error) {
 	defer response.Body.Close()
 
 	bodyBytes, err := io.ReadAll(response.Body)
@@ -58,6 +73,10 @@ func (w WeatherVS) DecodeResponse(response *http.Response) (*weather.WeatherData
 	if err != nil {
 		bodyString := string(bodyBytes)
 		log.Printf("Error message from VisualCrossing: %s\n", bodyString)
+		if strings.Contains(bodyString, "You have exceeded the maximum number") {
+			w.UpdateApiKey()
+		}
+		log.Printf("Changed API key. Try once again")
 		return nil, errors.New(bodyString)
 	}
 

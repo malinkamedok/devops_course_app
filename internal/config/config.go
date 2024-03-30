@@ -1,13 +1,14 @@
 package config
 
 import (
-	"github.com/caarlos0/env/v7"
 	"log"
+
+	"github.com/caarlos0/env/v7"
 )
 
 type Config struct {
-	AppPort  string `env:"PORT" envDefault:"8000"`
-	VSApiKey string `env:"API_KEY"`
+	AppPort string   `env:"PORT" envDefault:"8000"`
+	ApiKeys []string `env:"API_KEYS"`
 }
 
 func NewConfig() (*Config, error) {
