@@ -115,6 +115,10 @@ go build -o app cmd/main/main.go
 ./app
 ```
 
+### running web server
+
+Приложение запущено в облаке и доступно по [ссылке](https://devopscourseapp-production.up.railway.app/)
+
 ### Документация
 [OpenApi](https://malinkamedok.github.io/devops_course_app/)
 
