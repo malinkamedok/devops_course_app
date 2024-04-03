@@ -27,4 +27,10 @@ type (
 	WeatherContract interface {
 		GetWeatherInfo(dateFrom string, dateTo string, city string) (weather.ResponseData, error)
 	}
+
+	TelegramReq interface {
+	}
+
+	AlertContract interface {
+	}
 )

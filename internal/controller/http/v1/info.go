@@ -4,8 +4,6 @@ import (
 	"devops_course_app/internal/entity/weather"
 	"devops_course_app/internal/usecase"
 	"devops_course_app/pkg/web"
-	"fmt"
-	"io"
 	"log"
 	"net/http"
 
@@ -23,7 +21,6 @@ func NewInfoRoutes(routes chi.Router, c usecase.CurrencyContract, w usecase.Weat
 
 	routes.Get("/currency", ir.getCurrencyRate)
 	routes.Get("/weather", ir.getWeather)
-	routes.Post("/webhook", ir.gitlabWebhook)
 }
 
 type respCurrency struct {
@@ -70,12 +67,4 @@ func (i *infoRoutes) getWeather(w http.ResponseWriter, r *http.Request) {
 	}
 	responseJSON := respWeather{Data: response, Service: "weather"}
 	render.JSON(w, r, responseJSON)
-}
-
-func (i *infoRoutes) gitlabWebhook(w http.ResponseWriter, r *http.Request) {
-	body, err := io.ReadAll(r.Body)
-	if err != nil {
-		log.Printf("Reading body error")
-	}
-	fmt.Println(string(body))
 }

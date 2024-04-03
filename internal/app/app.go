@@ -5,6 +5,7 @@ import (
 	v1 "devops_course_app/internal/controller/http/v1"
 	"devops_course_app/internal/usecase"
 	"devops_course_app/internal/usecase/cbrf"
+	"devops_course_app/internal/usecase/telegram"
 	"devops_course_app/internal/usecase/visualcrossing"
 	"devops_course_app/pkg/httpserver"
 	"log"
@@ -19,10 +20,11 @@ func Run(cfg *config.Config) {
 
 	c := usecase.NewCurrencyUseCase(cbrf.NewCurrencyReq())
 	w := usecase.NewWeatherUseCase(visualcrossing.NewVSReq(cfg.ApiKeys))
+	a := usecase.NewAlertUseCase(telegram.NewTGReq(cfg.ChatID, cfg.ApiToken))
 
 	handler := chi.NewRouter()
 
-	v1.NewRouter(handler, c, w)
+	v1.NewRouter(handler, c, w, a)
 
 	server := httpserver.New(handler, httpserver.Port(cfg.AppPort))
 	interruption := make(chan os.Signal, 1)
