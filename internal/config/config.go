@@ -7,8 +7,10 @@ import (
 )
 
 type Config struct {
-	AppPort string   `env:"PORT" envDefault:"8000"`
-	ApiKeys []string `env:"API_KEYS"`
+	AppPort  string   `env:"PORT" envDefault:"8000"`
+	ApiKeys  []string `env:"API_KEYS"`
+	ChatID   string   `env:"CHAT_ID"`
+	ApiToken string   `env:"API_TOKEN"`
 }
 
 func NewConfig() (*Config, error) {
