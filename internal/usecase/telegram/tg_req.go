@@ -34,7 +34,8 @@ var _ usecase.TelegramReq = (*TelegramBot)(nil)
 
 func (t TelegramBot) InitRequest(data gitlab.WebhookData) (*http.Request, error) {
 	log.Println("init request")
-	message := fmt.Sprintf("Issue #%d\n Student: %s\n Status: %s → %s\n", data.IssueNumber, data.StudentRepoName, data.PreviousStatus, data.NewStatus)
+	message := fmt.Sprintf("Issue #%d\nStudent: %s\nStatus: %s → %s\n", data.IssueNumber, data.StudentRepoName, data.PreviousStatus, data.NewStatus)
+	log.Println(message)
 
 	var ikm ikMarkup
 	ikm.InlineKeyboard = append(ikm.InlineKeyboard, []ik{})
@@ -64,7 +65,6 @@ func (t TelegramBot) InitRequest(data gitlab.WebhookData) (*http.Request, error)
 }
 
 func (t TelegramBot) SendRequest(r *http.Request) error {
-	log.Println("send request")
 	c := http.Client{}
 
 	resp, err := c.Do(r)
