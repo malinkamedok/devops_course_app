@@ -24,7 +24,6 @@ func NewWebHookRoutes(routes chi.Router, a usecase.AlertContract) {
 }
 
 func (wh *webhookRoutes) gitlabWebhook(w http.ResponseWriter, r *http.Request) {
-	log.Println("webhook triggered")
 	var gw gitlab2.GitlabWebhook
 	decoder := json.NewDecoder(r.Body)
 	err := decoder.Decode(&gw)
