@@ -38,7 +38,7 @@ func (t TelegramBot) InitRequest(data gitlab.WebhookData) (*http.Request, error)
 
 	var ikm ikMarkup
 	ikm.InlineKeyboard = append(ikm.InlineKeyboard, []ik{})
-	ikm.InlineKeyboard[0] = append(ikm.InlineKeyboard[0], ik{})
+	ikm.InlineKeyboard[0] = append(ikm.InlineKeyboard[0], ik{}, ik{})
 
 	ikm.InlineKeyboard[0][0].Text = "Issue"
 	ikm.InlineKeyboard[0][0].Url = data.IssueURL
