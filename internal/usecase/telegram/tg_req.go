@@ -9,7 +9,6 @@ import (
 	"io"
 	"log"
 	"net/http"
-	url2 "net/url"
 )
 
 type TelegramBot struct {
@@ -24,6 +23,12 @@ type ikMarkup struct {
 type ik struct {
 	Text string `json:"text"`
 	Url  string `json:"url"`
+}
+
+type messageParams struct {
+	ChatID      string   `json:"chat_id"`
+	Text        string   `json:"text"`
+	ReplyMarkup ikMarkup `json:"reply_markup"`
 }
 
 func NewTGReq(chatID string, apiToken string) *TelegramBot {
@@ -52,13 +57,15 @@ func (t TelegramBot) InitRequest(data gitlab.WebhookData) (*http.Request, error)
 		},
 	}}
 
-	marshalled, err := json.Marshal(kb)
+	msgStr := &messageParams{ChatID: t.chatID, Text: message, ReplyMarkup: *kb}
+
+	marshalled, err := json.Marshal(msgStr)
 	if err != nil {
 		log.Printf("Error in marshalling buttons struct")
 		return nil, err
 	}
 
-	url := fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s", t.apiToken, t.chatID, url2.QueryEscape(message))
+	url := fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage", t.apiToken)
 
 	req, err := http.NewRequest("POST", url, bytes.NewReader(marshalled))
 	if err != nil {
