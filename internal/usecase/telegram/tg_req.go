@@ -37,6 +37,9 @@ func (t TelegramBot) InitRequest(data gitlab.WebhookData) (*http.Request, error)
 	message := fmt.Sprintf("Issue #%d\n Student: %s\n Status: %s → %s\n", data.IssueNumber, data.StudentRepoName, data.PreviousStatus, data.NewStatus)
 
 	var ikm ikMarkup
+	ikm.InlineKeyboard = append(ikm.InlineKeyboard, []ik{})
+	ikm.InlineKeyboard[0] = append(ikm.InlineKeyboard[0], ik{})
+
 	ikm.InlineKeyboard[0][0].Text = "Issue"
 	ikm.InlineKeyboard[0][0].Url = data.IssueURL
 	ikm.InlineKeyboard[0][1].Text = "Repo"
