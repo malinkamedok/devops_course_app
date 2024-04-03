@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"devops_course_app/internal/entity/currency"
+	"devops_course_app/internal/entity/gitlab"
 	"devops_course_app/internal/entity/weather"
 	"net/http"
 )
@@ -29,8 +30,12 @@ type (
 	}
 
 	TelegramReq interface {
+		InitRequest(data gitlab.WebhookData) (*http.Request, error)
+		SendRequest(r *http.Request) error
 	}
 
 	AlertContract interface {
+		DecodeWebhook(webhook *gitlab.GitlabWebhook) *gitlab.WebhookData
+		SendAlert(data *gitlab.WebhookData) error
 	}
 )
