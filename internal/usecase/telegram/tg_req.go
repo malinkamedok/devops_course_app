@@ -42,19 +42,20 @@ func (t TelegramBot) InitRequest(data gitlab.WebhookData) (*http.Request, error)
 	ikm.InlineKeyboard[0][1].Text = "Repo"
 	ikm.InlineKeyboard[0][1].Url = data.RepoURL
 
-	b := new(bytes.Buffer)
-	err := json.NewEncoder(b).Encode(ikm)
+	marshalled, err := json.Marshal(ikm)
 	if err != nil {
+		log.Printf("Error in marshalling buttons struct")
 		return nil, err
 	}
 
 	url := fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s", t.apiToken, t.chatID, url2.QueryEscape(message))
 
-	req, err := http.NewRequest("POST", url, b)
+	req, err := http.NewRequest("POST", url, bytes.NewReader(marshalled))
 	if err != nil {
 		log.Printf("Error in creating request")
 		return nil, err
 	}
+	req.Header.Set("Content-Type", "application/json")
 
 	return req, nil
 }
