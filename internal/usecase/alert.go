@@ -1,6 +1,9 @@
 package usecase
 
-import "devops_course_app/internal/entity/gitlab"
+import (
+	"devops_course_app/internal/entity/gitlab"
+	"log"
+)
 
 type AlertUseCase struct {
 	tgBot TelegramReq
@@ -13,6 +16,7 @@ func NewAlertUseCase(tgBot TelegramReq) *AlertUseCase {
 var _ AlertContract = (*AlertUseCase)(nil)
 
 func (a AlertUseCase) DecodeWebhook(webhook *gitlab.GitlabWebhook) *gitlab.WebhookData {
+	log.Println("decode webhook")
 	var data gitlab.WebhookData
 	data.IssueNumber = webhook.ObjectAttributes.IID
 	data.StudentRepoName = webhook.Repository.Name
@@ -24,6 +28,7 @@ func (a AlertUseCase) DecodeWebhook(webhook *gitlab.GitlabWebhook) *gitlab.Webho
 }
 
 func (a AlertUseCase) SendAlert(data *gitlab.WebhookData) error {
+	log.Println("send webhook")
 	req, err := a.tgBot.InitRequest(*data)
 	if err != nil {
 		return err
