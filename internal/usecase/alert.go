@@ -18,8 +18,29 @@ func (a AlertUseCase) DecodeWebhook(webhook *gitlab.GitlabWebhook) *gitlab.Webho
 	var data gitlab.WebhookData
 	data.IssueNumber = webhook.ObjectAttributes.IID
 	data.StudentRepoName = webhook.Repository.Name
-	data.PreviousStatus = webhook.Changes.Labels.Previous[0].Title
-	data.NewStatus = webhook.Changes.Labels.Current[0].Title
+	data.WhoChanged = webhook.User.Name
+
+	if len(webhook.Changes.Labels.Previous) > 0 {
+		for i, label := range webhook.Changes.Labels.Previous {
+			if i > 0 {
+				data.PreviousStatus = data.PreviousStatus + ", "
+			}
+			data.PreviousStatus = data.PreviousStatus + label.Title
+		}
+	} else {
+		data.PreviousStatus = webhook.ObjectAttributes.State
+	}
+	if len(webhook.Changes.Labels.Current) > 0 {
+		for i, label := range webhook.Changes.Labels.Current {
+			if i > 0 {
+				data.NewStatus = data.NewStatus + ", "
+			}
+			data.NewStatus = data.NewStatus + label.Title
+		}
+	} else {
+		data.NewStatus = webhook.ObjectAttributes.State
+	}
+
 	data.IssueURL = webhook.ObjectAttributes.URL
 	data.RepoURL = webhook.Repository.Homepage
 	return &data
