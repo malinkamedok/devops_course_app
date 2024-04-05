@@ -127,9 +127,11 @@ go build -o app cmd/main/main.go
 
 ##### Parameters
 
-> | name    | type     | example                     | description                             |
-> |---------|----------|-----------------------------|-----------------------------------------|
-> | PORT    | optional | `8000`                      | Порт приложения. default = 8000         |
-> | API_KEY | required | `AAAAAAAAAAAAAAA123BBBBBBB` | API ключ для сервиса visualcrossing     |
+> | name      | type     | example                                | description                                         |
+> |-----------|----------|----------------------------------------|-----------------------------------------------------|
+> | PORT      | optional | `8000`                                 | Порт приложения. default = 8000                     |
+> | API_KEY   | required | `AAAAAAAAAAAAAAA123BBBBBBB`            | API ключ для сервиса visualcrossing                 |
+> | API_TOKEN | required | `0123456789:aaaaabbbbbCcccc12345DDddd` | API ключ для доступа к Telegram боту через HTTP API |
+> | CHAT_ID   | required | `-0123456789`                          | ID чата в Telegram                                  |
 
 </details>
