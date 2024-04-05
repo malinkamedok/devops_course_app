@@ -5,6 +5,7 @@ import (
 	"devops_course_app/internal/usecase"
 	"devops_course_app/pkg/web"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -35,6 +36,18 @@ func (wh *webhookRoutes) gitlabWebhook(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
+	//debug
+	prettyJSON, err := json.MarshalIndent(gw, "", "    ")
+	if err != nil {
+		err := render.Render(w, r, web.ErrRender(err))
+		if err != nil {
+			log.Printf("Rendering error")
+			return
+		}
+		return
+	}
+	fmt.Println(string(prettyJSON))
+	//debug
 	data := wh.a.DecodeWebhook(&gw)
 	err = wh.a.SendAlert(data)
 	if err != nil {
