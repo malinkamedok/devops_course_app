@@ -38,6 +38,10 @@ func (wh *webhookRoutes) gitlabWebhook(w http.ResponseWriter, r *http.Request) {
 	if gw.ObjectAttributes.Action != "update" || len(gw.Changes.Labels.Previous) == 0 || len(gw.Changes.Labels.Current) == 0 {
 		return
 	}
+	// disable alert for closing issue with done label
+	if len(gw.Changes.Labels.Current) == 1 && gw.Changes.Labels.Current[0].Title == "Done" {
+		return
+	}
 	data := wh.a.DecodeWebhook(&gw)
 	if data.NewStatus == data.PreviousStatus {
 		log.Println("issue status hasn't changed")
