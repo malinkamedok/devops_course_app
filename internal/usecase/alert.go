@@ -26,6 +26,8 @@ func (a AlertUseCase) DecodeWebhook(webhook *gitlab.GitlabWebhook) *gitlab.Webho
 		}
 		if len(webhook.Changes.Labels.Current) > 0 {
 			data.NewStatus = webhook.Changes.Labels.Current[0].Title
+		} else {
+			data.NewStatus = webhook.ObjectAttributes.State
 		}
 	} else if webhook.ObjectAttributes.Action == "close" {
 		log.Println("close case triggered")
