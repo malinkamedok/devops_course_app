@@ -2,7 +2,6 @@ package usecase
 
 import (
 	"devops_course_app/internal/entity/gitlab"
-	"log"
 )
 
 type AlertUseCase struct {
@@ -19,21 +18,28 @@ func (a AlertUseCase) DecodeWebhook(webhook *gitlab.GitlabWebhook) *gitlab.Webho
 	var data gitlab.WebhookData
 	data.IssueNumber = webhook.ObjectAttributes.IID
 	data.StudentRepoName = webhook.Repository.Name
-	if webhook.ObjectAttributes.Action == "update" {
-		log.Println("update case triggered")
-		if len(webhook.Changes.Labels.Previous) > 0 {
-			data.PreviousStatus = webhook.Changes.Labels.Previous[0].Title
+
+	if len(webhook.Changes.Labels.Previous) > 0 {
+		for i, label := range webhook.Changes.Labels.Previous {
+			if i > 0 {
+				data.PreviousStatus = data.PreviousStatus + ", "
+			}
+			data.PreviousStatus = data.PreviousStatus + label.Title
 		}
-		if len(webhook.Changes.Labels.Current) > 0 {
-			data.NewStatus = webhook.Changes.Labels.Current[0].Title
-		} else {
-			data.NewStatus = webhook.ObjectAttributes.State
+	} else {
+		data.PreviousStatus = webhook.ObjectAttributes.State
+	}
+	if len(webhook.Changes.Labels.Current) > 0 {
+		for i, label := range webhook.Changes.Labels.Current {
+			if i > 0 {
+				data.NewStatus = data.NewStatus + ", "
+			}
+			data.NewStatus = data.NewStatus + label.Title
 		}
-	} else if webhook.ObjectAttributes.Action == "close" {
-		log.Println("close case triggered")
-		data.PreviousStatus = webhook.Labels[0].Title
+	} else {
 		data.NewStatus = webhook.ObjectAttributes.State
 	}
+
 	data.IssueURL = webhook.ObjectAttributes.URL
 	data.RepoURL = webhook.Repository.Homepage
 	return &data

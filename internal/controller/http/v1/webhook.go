@@ -35,16 +35,12 @@ func (wh *webhookRoutes) gitlabWebhook(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
-	if gw.ObjectAttributes.Action == "close" {
+	if gw.ObjectAttributes.Action != "update" {
 		return
 	}
 	data := wh.a.DecodeWebhook(&gw)
 	if data.NewStatus == data.PreviousStatus {
 		log.Println("issue status hasn't changed")
-		return
-	}
-	if gw.ObjectAttributes.Action == "update" && gw.Changes.Labels.Current == nil {
-		log.Println("skip unnecessary alert")
 		return
 	}
 	err = wh.a.SendAlert(data)
