@@ -21,6 +21,7 @@ func (a AlertUseCase) DecodeWebhook(webhook *gitlab.GitlabWebhook) *gitlab.Webho
 	data.StudentRepoName = webhook.Repository.Name
 	if webhook.ObjectAttributes.Action == "update" {
 		log.Println("update case triggered")
+		log.Println(webhook.ObjectAttributes.State)
 		if len(webhook.Changes.Labels.Previous) > 0 {
 			data.PreviousStatus = webhook.Changes.Labels.Previous[0].Title
 		}
