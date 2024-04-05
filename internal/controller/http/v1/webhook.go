@@ -41,6 +41,10 @@ func (wh *webhookRoutes) gitlabWebhook(w http.ResponseWriter, r *http.Request) {
 		log.Println("issue status hasn't changed")
 		return
 	}
+	if gw.ObjectAttributes.Action == "update" && gw.Changes.Labels.Current == nil {
+		log.Println("skip unnecessary alert")
+		return
+	}
 	err = wh.a.SendAlert(data)
 	if err != nil {
 		err := render.Render(w, r, web.ErrRender(err))
