@@ -35,7 +35,9 @@ func (wh *webhookRoutes) gitlabWebhook(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
-
+	if gw.ObjectAttributes.Action == "close" {
+		return
+	}
 	data := wh.a.DecodeWebhook(&gw)
 	if data.NewStatus == data.PreviousStatus {
 		log.Println("issue status hasn't changed")
