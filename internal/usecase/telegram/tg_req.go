@@ -38,7 +38,7 @@ func NewTGReq(chatID string, apiToken string) *TelegramBot {
 var _ usecase.TelegramReq = (*TelegramBot)(nil)
 
 func (t TelegramBot) InitRequest(data gitlab.WebhookData) (*http.Request, error) {
-	message := fmt.Sprintf("Issue #%d\nStudent: %s\nStatus: %s → %s\n", data.IssueNumber, data.StudentRepoName, data.PreviousStatus, data.NewStatus)
+	message := fmt.Sprintf("Issue #%d\nStudent: %s\nWho changed: %s\nStatus: %s → %s\n", data.IssueNumber, data.StudentRepoName, data.WhoChanged, data.PreviousStatus, data.NewStatus)
 
 	kb := &ikMarkup{InlineKeyboard: [][]ik{
 		{
