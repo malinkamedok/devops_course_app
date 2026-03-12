@@ -8,7 +8,7 @@ import (
 	"github.com/go-chi/cors"
 )
 
-func NewRouter(handler *chi.Mux, c usecase.CurrencyContract, w usecase.WeatherContract, a usecase.AlertContract) {
+func NewInfoRouter(handler *chi.Mux, c usecase.CurrencyContract, w usecase.WeatherContract) {
 	handler.Route("/info", func(r chi.Router) {
 		r.Use(cors.Handler(cors.Options{
 			AllowedOrigins:   []string{"https://*", "http://*"},
@@ -21,6 +21,12 @@ func NewRouter(handler *chi.Mux, c usecase.CurrencyContract, w usecase.WeatherCo
 		NewInfoRoutes(r, c, w)
 	})
 
+	handler.NotFound(func(w http.ResponseWriter, r *http.Request) {
+		http.Error(w, "Not Found", http.StatusNotFound)
+	})
+}
+
+func NewWebhookRouter(handler *chi.Mux, a usecase.AlertContract) {
 	handler.Route("/webhook", func(r chi.Router) {
 		r.Use(cors.Handler(cors.Options{
 			AllowedOrigins:   []string{"https://*", "http://*"},

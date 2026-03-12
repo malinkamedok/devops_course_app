@@ -24,7 +24,10 @@ func Run(cfg *config.Config) {
 
 	handler := chi.NewRouter()
 
-	v1.NewRouter(handler, c, w, a)
+	v1.NewInfoRouter(handler, c, w)
+	if cfg.ChatID != "" && cfg.ApiToken != "" {
+		v1.NewWebhookRouter(handler, a)
+	}
 
 	server := httpserver.New(handler, httpserver.Port(cfg.AppPort))
 	interruption := make(chan os.Signal, 1)

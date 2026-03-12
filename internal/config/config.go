@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/caarlos0/env/v7"
@@ -19,6 +20,9 @@ func NewConfig() (*Config, error) {
 	if err != nil {
 		log.Println("Error in parsing env")
 		return nil, err
+	}
+	if len(cfg.ApiKeys) == 0 {
+		return nil, fmt.Errorf("no API_KEYS provided")
 	}
 	return cfg, nil
 }
